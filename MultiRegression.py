@@ -45,18 +45,60 @@ x_train,x_test,y_train,y_test = train_test_split(data_en.drop(['play'],axis=1),p
 
 regressor = LinearRegression()
 regressor.fit(x_train,y_train)
-predicted = regressor.predict(x_test)
-arr=np.arange(5)
+#kullanıcı girişi
+#Hava Durumu Değerleri oluşturma
+hava = int(input("For Sunny Press 1\nFor Rainy Press 2\nFor Overcast Press 3\n"))
+hava_df = pd.DataFrame(data=[0],index =range(0,1), columns=['Sunny'])
+hava_df2 = pd.DataFrame(data=[0],index =range(0,1), columns=['Rainy'])
+hava_df3 = pd.DataFrame(data=[0],index =range(0,1), columns=['Overcast'])
+
+if hava==1:
+    hava_df=hava_df.replace(0,1)
+    weather_user_data = pd.concat([hava_df3,hava_df2,hava_df],axis=1)
+if hava==2:
+    hava_df2=hava_df2.replace(0,1)
+    weather_user_data = pd.concat([hava_df3,hava_df2,hava_df],axis=1)
+if hava==3:
+    hava_df3=hava_df3.replace(0,1)
+    weather_user_data = pd.concat([hava_df3,hava_df2,hava_df],axis=1) 
+#print (weather_user_data)
+#Temprature Sorgu
+sicaklik = int(input("Hava Sıcaklığı Kaç Derece(F):"))
+sicaklik_df=pd.DataFrame(data=[sicaklik],index=range(0,1),columns=['Temprature'])
+#print (sicaklik_df)
+#Nem Sorgu
+nem = int(input("Havadaki Nem Oranı Kaç:"))
+nem_df=pd.DataFrame(data=[nem],index=range(0,1),columns=['Humidity'])
+#print (nem_df)
+#Wind Sorgu
+ruzgar_df=pd.DataFrame(data=[0],index=range(0,1),columns=['Windy'])
+ruzgar = int(input("Havada Rüzgar Var Mı?\nVarsa 1'e Yoksa 2'ye Basınız:"))
+if ruzgar==1:
+    ruzgar_df=ruzgar_df.replace(0,1)
+else:
+    ruzgar_df=ruzgar_df.replace(0,0)
+#print (ruzgar_df)
+#UserData Create
+data_user=pd.concat([weather_user_data,sicaklik_df,nem_df,ruzgar_df],axis=1)
+#print (data_user)
+    
+    
+#Predict From User Data
+predicted = regressor.predict(data_user)
+arr=np.arange(1)
 a= arr.tolist()
 
 predict_yn = a
-for x in range (5):
+for x in range (0,1):
     if predicted[x]>=0.7:
         predict_yn[x]="yes"
     else:
         predict_yn[x]="no"
         
-print (predict_yn)
+if predict_yn[0]=="yes":
+    print("Tenis Oynanabilir")
+if  predict_yn[0]=="no":
+    print("Bu Havada Tenis mi Olur mk çocu")
 
 
 
